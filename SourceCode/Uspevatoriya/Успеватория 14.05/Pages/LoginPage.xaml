@@ -1,0 +1,66 @@
+﻿<local:BasePage x:TypeArguments="local:LoginViewModel" 
+      x:Class="Успеватория.LoginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Успеватория"
+      xmlns:core="clr-namespace:Успеватория.Ядро;assembly=Успеватория.Ядро"
+      mc:Ignorable="d" 
+      x:Name="Page"
+      d:DesignHeight="700" d:DesignWidth="700"
+      >
+
+    <Border >
+        <Grid>
+            
+            <!--Главный скролл вью-->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    TextBlock.TextAlignment="Center">
+                    
+                    <!--Белая коробка-->
+                    <Border Background="{StaticResource ForegroundLightBrush}"
+                            CornerRadius="10"
+                            Padding="15 50 15 15"
+                            Width="330"
+                            Margin="50 50 50 0">
+                        
+                        <StackPanel>
+                            
+                            <!--Голова-->
+                            <TextBlock Text="Авторизация" FontSize="{StaticResource FontSizeXXLarge}" 
+                                   FontFamily="{StaticResource LatoRegular}"
+                                   Foreground="{StaticResource WordOrangeBrush}"/>
+                            
+                            <!--Сопутствующий текст-->
+                            <TextBlock Text="Введите логин и пароль для входа"
+                                       FontSize="{StaticResource FontSizeSmall}"
+                                       Foreground="{StaticResource ForegroundDarkBrush}"
+                                       Margin="0 0 0 20"/>
+                            
+                            <!--Логин-->
+                            <TextBox Text="{Binding Login}" ToolTip="Введите логин" Tag="Логин" local:IsFocusedProperty.Value ="True"/>
+                            
+                            <!--Пароль-->
+                            <PasswordBox x:Name="PasswordText" Tag="Пароль" ToolTip="Введите пароль" Margin="0 0 0 30"/>
+
+                            <!--Кнопка входа-->
+                            <Button Content="Войти" 
+                                    IsDefault="True"
+                                    local:IsBusyProperty.Value="{Binding LoginIsRunning}"
+                                    Command="{Binding LoginCommand}"
+                                    CommandParameter="{Binding ElementName=Page}" 
+                                    HorizontalAlignment="Center" 
+                                    ToolTip="Нажмите для входа"/>
+                        </StackPanel>
+                        
+                    </Border>
+                    
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</local:BasePage>

@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="Успеватория.SideMenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Успеватория"
+             xmlns:core="clr-namespace:Успеватория.Ядро;assembly=Успеватория.Ядро"
+             
+             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:UserListDesignModel x:Key="DesignModel">
+        </local:UserListDesignModel>
+        <local:LoginViewModel x:Key="Store">
+        </local:LoginViewModel>
+    </UserControl.Resources>
+    <UserControl.Template>
+        <ControlTemplate TargetType="UserControl">
+
+            <!-- Главный фон -->
+            <Border>
+
+                <!-- Контент -->
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Верхнее меню -->
+                    <Grid Height="50">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Главные кнопки -->
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource IconButton}" Content="{StaticResource FontAwesomeGroupIcon}"  Command="{Binding OpenTableCommand}" ToolTip='Вкладка "группы"'/>
+                            <Button Style="{StaticResource IconButton}" Content="{StaticResource FontAwesomeScheduleIcon}" Command="{Binding OpenScheduleCommand}" ToolTip='Вкладка "расписание"'/>
+                           
+                            <Button Visibility="{Binding IsVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True, Mode=TwoWay}"
+                                Style="{StaticResource IconButton}"
+                                    Content="{StaticResource FontAwesomeUserIcon}" 
+                                    ToolTip='Вкладка "пользователи"' Command="{Binding OpenUserCommand}">
+                                
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Сотировать по" >
+                                            <MenuItem Header="Фамилии А-Я" Command="{Binding SortByName, Source={StaticResource DesignModel}}"></MenuItem>
+                                            <MenuItem Header="Фамилии Я-А" Command="{Binding SortByNameRev, Source={StaticResource DesignModel}}"></MenuItem>
+                                            <MenuItem Header="Роли" Command="{Binding SortByRole, Source={StaticResource DesignModel}}"></MenuItem>
+                                        </MenuItem>
+                                        <MenuItem Header="Показывать только" >
+                                            <CheckBox Content="Администраторов" IsChecked="{Binding IsAdminSelected, Source={StaticResource DesignModel}, Mode=TwoWay}"></CheckBox>
+                                            <CheckBox Content="Преподавателей" IsChecked="{Binding IsTeacherSelected, Source={StaticResource DesignModel}, Mode=TwoWay}"></CheckBox>
+                                            <CheckBox Content="Студентов" IsChecked="{Binding IsStudentSelected, Source={StaticResource DesignModel}, Mode=TwoWay}"></CheckBox>
+                                            <CheckBox Content="Родителей" IsChecked="{Binding IsParentSelected, Source={StaticResource DesignModel}, Mode=TwoWay}"></CheckBox>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Кнопка настройки -->
+                        <Button Grid.Column="2"
+                                Foreground="{StaticResource WordPaleOrangeBrush}"
+                                Style="{StaticResource IconButton}"
+                                Content="{StaticResource FontAwesomeCogIcon}"
+                                Command="{Binding SettingsViewModel.OpenCommand,
+                            Source={x:Static local:ViewModelLocator.Instance}}" ToolTip='Настройки'/>
+
+                    </Grid>
+
+                    <!-- Пользовательское насыщение -->
+                    <Border Grid.Row="1" Background="{StaticResource ForegroundLightBrush}">
+                        <ContentPresenter/>
+                    </Border>
+
+                </Grid>
+
+            </Border>
+
+        </ControlTemplate>
+    </UserControl.Template>
+
+</UserControl>

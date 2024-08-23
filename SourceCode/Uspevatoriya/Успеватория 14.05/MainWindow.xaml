@@ -1,0 +1,161 @@
+﻿<Window x:Class="Успеватория.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Успеватория"       
+        xmlns:core="clr-namespace:Успеватория.Ядро;assembly=Успеватория.Ядро"
+        mc:Ignorable="d"
+        WindowStyle="None" 
+        AllowsTransparency="True"
+        x:Name="AppWindow"
+        MinWidth="{Binding WindowMinimumWidth}"
+        MinHeight="{Binding WindowMinimumHeight}"
+        WindowStartupLocation="CenterScreen"
+        Activated="AppWindow_Activated"
+        Deactivated="AppWindow_Deactivated"
+        Title="MainWindow" Height="600" Width="900">
+    
+    <Window.Resources>
+        <Style TargetType="{x:Type local:MainWindow}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <!--Внешняя граница с теневым краем-->
+                        <Border Padding="{Binding OuterMarginSize, FallbackValue=0}" BorderBrush="{StaticResource ForegroundDarkBrush}" BorderThickness="{Binding FlatBorderThickness}">
+
+                            <!--контур окна-->
+                            <Grid>
+
+                                <!-- Граница при перетаскивании окна -->
+                                <Border BorderThickness="{Binding BeingMoved, Converter={local:BooleanToBorderThicknessConverter}}"
+                                 Panel.ZIndex="2"
+                                 CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}"
+                                 BorderBrush="{StaticResource WordOrangeBrush}" />   
+
+                                <!-- Не прозрачная маска для углов -->
+                                <Border x:Name="Container"
+                                        Background="{StaticResource BackgroundLightBrush}"
+                                        CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}" />
+
+                                <!-- Граница окна с тенями -->
+                                <Border CornerRadius="{Binding WindowCornerRadius, FallbackValue=10}"
+                                    Background="{StaticResource ForegroundLightBrush}">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="0.5" Opacity="0.2" />
+                                    </Border.Effect>
+                                </Border>
+
+                                <!--Главное окно-->
+                                <Grid>
+
+                                    <!-- Обрезка углов -->
+                                    <Grid.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=Container}" />
+                                    </Grid.OpacityMask>
+
+                                    <Grid.RowDefinitions>
+
+                                        <!-- Верхняя панель -->
+                                        <RowDefinition Height="{Binding TitleHeightGridLength, FallbackValue=42}" />
+
+                                        <!-- Панель интернет подключения-->
+                                        <RowDefinition Height="Auto" />
+
+                                        <!-- Содержимое окна-->
+                                        <RowDefinition Height="*" />
+
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Верхняя панель -->
+                                    <Grid Grid.Column="0" Panel.ZIndex="1">
+
+                                        <Grid.ColumnDefinitions>
+                                            <!-- Иконка -->
+                                            <ColumnDefinition Width="Auto" />
+                                            <!-- Тайтл -->
+                                            <ColumnDefinition Width="*" />
+                                            <!-- Кнопки управления окном-->
+                                            <ColumnDefinition Width="Auto" />
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Иконка -->
+                                        <Button Style="{StaticResource SystemIconButton}" Command="{Binding MenuCommand}">
+                                            <Image Source="/Images/Logo/logo-small.png" />
+                                        </Button>
+
+                                        <!-- Тайтл -->
+                                        <Viewbox Grid.Column="0" Grid.ColumnSpan="3" Margin="5">
+                                            <StackPanel>
+                                                <TextBlock FontFamily="{StaticResource LatoBold}" FontSize="{StaticResource FontSizeXXLarge}" Foreground="{StaticResource WordOrangeBrush}" Margin="0,0,0,-5">
+                                                   Успеватория
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Viewbox>
+
+                                        <!-- Кнопки управления окном -->
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <Button Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}" Content="_" ToolTip="Свернуть окно"/>
+                                            <Button Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}" Content="[ ]" ToolTip="Открыть на весь экран"/>
+                                            <Button Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}" Content="X" ToolTip="Закрыть приложение"/>
+                                        </StackPanel>
+
+                                    </Grid>
+
+                                    <!-- Страница содержимого -->
+                                    <Border Grid.Row="2" Padding="{Binding InnerContentPadding}" ClipToBounds="True">
+                                        <ContentPresenter Content="{TemplateBinding Content}" />
+                                    </Border>
+
+                                </Grid>
+
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="{Binding ResizeBorderThickness}" 
+                      CaptionHeight="{Binding TitleHeight}"
+                      GlassFrameThickness="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Border  Background="{StaticResource WordLightOrangeBrush}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto " />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--Настройки-->
+            <local:SettingsControl Grid.ColumnSpan="2"
+                                   Panel.ZIndex="9"
+                                   local:AnimateSlideInFromBottomMarginProperty.Value="{Binding ApplicationViewModel.SettingsMenuVisible, Source={x:Static local:ViewModelLocator.Instance}}"/>
+            <!--Оверлей-->
+            <Border Grid.ColumnSpan="2"
+                    Panel.ZIndex="10"
+                    Opacity="0.3">
+                <Border Background="{StaticResource ForegroundVeryDarkBrush}"
+                        local:AnimateFadeInProperty.Value="{Binding DimmableOverlayVisible}"/>
+            </Border>
+
+            <local:PageHost Grid.Column="1" 
+                   CurrentPage="{Binding ApplicationViewModel.CurrentPage,
+                                        Source={x:Static local:ViewModelLocator.Instance}}"
+                   CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
+                                        Source={x:Static local:ViewModelLocator.Instance}}"/>
+            
+            <!-- Боковое меню -->
+            <local:SideMenuControl Width="250" x:Name="mSideMenuControl"
+                                   DataContext="{Binding ApplicationViewModel, Source={x:Static local:ViewModelLocator.Instance}}"
+                                   local:AnimateSlideInFromLeftProperty.Value="{Binding SideMenuVisible}"
+                                   Content="{Binding CurrentSideMenuContent, Converter={local:SideMenuContentConverter}}"/>
+
+
+        </Grid>
+    </Border>
+
+</Window>

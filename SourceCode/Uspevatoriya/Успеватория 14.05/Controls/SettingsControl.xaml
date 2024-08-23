@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="Успеватория.SettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Успеватория"
+             xmlns:core ="clr-namespace:Успеватория.Ядро;assembly=Успеватория.Ядро"
+             mc:Ignorable="d" 
+             >
+    <Border Background="{StaticResource ForegroundLightBrush}"
+            Padding="15">
+
+        <Grid>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Панель настроек-->
+            <Grid Height="40" Margin="0 0 0 20">
+
+                <!--Кнопка назад-->
+                <Button Style="{StaticResource IconGrowButton}"
+                        Height="40"
+                        Content="{StaticResource FontAwesomeArrowLeftIcon}"
+                        FontFamily="{StaticResource FontAwesome}"
+                        Foreground="{StaticResource ForegroundVeryDarkBrush}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Command="{Binding CloseCommand}" ToolTip="Назад"
+                        />
+
+                <!--Заголовок-->
+                <TextBlock FontSize="{StaticResource FontSizeLarge}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                    
+                <!--Шестерёнка-->
+                <Run FontFamily="{StaticResource FontAwesome}"
+                     Text="{StaticResource FontAwesomeCogIcon}"
+                     Foreground="{StaticResource WordOrangeBrush}"
+                     />
+                <!--Текст настроек-->          
+                <Run Text="Настройки"
+                     FontFamily="{StaticResource FontAwesome}"
+                     />
+
+                </TextBlock>
+            </Grid>
+
+            <!--Главный контент-->
+            <Grid Grid.Row="1"
+                  Width="600"
+                  VerticalAlignment="Top">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1"
+                            HorizontalAlignment="Center">
+
+                    <Button Content="{Binding LogoutButtonText}"
+                            IsDefault="True"
+                            local:IsBusyProperty.Value="{Binding LogoutIsRunning}"
+                        Command="{Binding LogoutCommand}"
+                        FontSize="{StaticResource FontSizeRegular}" ToolTip="Выйти из учётной записи"/>
+
+                </StackPanel>
+                
+            </Grid>
+
+        </Grid>
+    </Border>
+</UserControl>

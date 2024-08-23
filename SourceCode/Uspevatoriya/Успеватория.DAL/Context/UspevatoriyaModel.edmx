@@ -1,0 +1,631 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище sqlUspevatoriyaModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AcademicPerfomances">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDLessons" Type="int" Nullable="false" />
+          <Property Name="IDCousrseStudent" Type="int" Nullable="false" />
+          <Property Name="Grade" Type="nvarchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="CourseName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Courses">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCourseName" Type="int" Nullable="false" />
+          <Property Name="IDTeacher" Type="int" />
+          <Property Name="DateBegin" Type="datetime" />
+          <Property Name="DateEnd" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CourseStudent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCourse" Type="int" Nullable="false" />
+          <Property Name="IDStudent" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lessons">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCourse" Type="int" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ParentsChild">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDParent" Type="int" Nullable="false" />
+          <Property Name="IDChildren" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDRoles" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="255" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="255" />
+          <Property Name="IndentificstionDocument" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__AcademicP__IDCou__5812160E">
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AcademicPerfomances" Type="Self.AcademicPerfomances" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseStudent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AcademicPerfomances">
+              <PropertyRef Name="IDCousrseStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AcademicP__IDLes__571DF1D5">
+          <End Role="Lessons" Type="Self.Lessons" Multiplicity="1" />
+          <End Role="AcademicPerfomances" Type="Self.AcademicPerfomances" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lessons">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AcademicPerfomances">
+              <PropertyRef Name="IDLessons" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Courses__IDCours__412EB0B6">
+          <End Role="CourseName" Type="Self.CourseName" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="IDCourseName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Courses__IDTeach__4222D4EF">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="IDTeacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CourseStu__IDCou__45F365D3">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CourseStudent">
+              <PropertyRef Name="IDCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CourseStu__IDStu__46E78A0C">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CourseStudent">
+              <PropertyRef Name="IDStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Lessons__IDCours__534D60F1">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="Lessons" Type="Self.Lessons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Lessons">
+              <PropertyRef Name="IDCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ParentsCh__IDChi__3C69FB99">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ParentsChild" Type="Self.ParentsChild" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ParentsChild">
+              <PropertyRef Name="IDChildren" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ParentsCh__IDPar__3B75D760">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ParentsChild" Type="Self.ParentsChild" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ParentsChild">
+              <PropertyRef Name="IDParent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__IDRoles__38996AB5">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="IDRoles" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище sqlUspevatoriyaModelContainer">
+          <EntitySet Name="AcademicPerfomances" EntityType="Self.AcademicPerfomances" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseName" EntityType="Self.CourseName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseStudent" EntityType="Self.CourseStudent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lessons" EntityType="Self.Lessons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParentsChild" EntityType="Self.ParentsChild" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AcademicP__IDCou__5812160E" Association="Self.FK__AcademicP__IDCou__5812160E">
+            <End Role="CourseStudent" EntitySet="CourseStudent" />
+            <End Role="AcademicPerfomances" EntitySet="AcademicPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AcademicP__IDLes__571DF1D5" Association="Self.FK__AcademicP__IDLes__571DF1D5">
+            <End Role="Lessons" EntitySet="Lessons" />
+            <End Role="AcademicPerfomances" EntitySet="AcademicPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Courses__IDCours__412EB0B6" Association="Self.FK__Courses__IDCours__412EB0B6">
+            <End Role="CourseName" EntitySet="CourseName" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Courses__IDTeach__4222D4EF" Association="Self.FK__Courses__IDTeach__4222D4EF">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CourseStu__IDCou__45F365D3" Association="Self.FK__CourseStu__IDCou__45F365D3">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CourseStudent" EntitySet="CourseStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CourseStu__IDStu__46E78A0C" Association="Self.FK__CourseStu__IDStu__46E78A0C">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CourseStudent" EntitySet="CourseStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Lessons__IDCours__534D60F1" Association="Self.FK__Lessons__IDCours__534D60F1">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Lessons" EntitySet="Lessons" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ParentsCh__IDChi__3C69FB99" Association="Self.FK__ParentsCh__IDChi__3C69FB99">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ParentsChild" EntitySet="ParentsChild" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ParentsCh__IDPar__3B75D760" Association="Self.FK__ParentsCh__IDPar__3B75D760">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ParentsChild" EntitySet="ParentsChild" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__IDRoles__38996AB5" Association="Self.FK__Users__IDRoles__38996AB5">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="sqlUspevatoriyaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AcademicPerfomance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDLessons" Type="Int32" Nullable="false" />
+          <Property Name="IDCousrseStudent" Type="Int32" Nullable="false" />
+          <Property Name="Grade" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CourseStudent" Relationship="Self.FK__AcademicP__IDCou__5812160E" FromRole="AcademicPerfomances" ToRole="CourseStudent" />
+          <NavigationProperty Name="Lesson" Relationship="Self.FK__AcademicP__IDLes__571DF1D5" FromRole="AcademicPerfomances" ToRole="Lessons" />
+        </EntityType>
+        <EntityType Name="CourseName">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__IDCours__412EB0B6" FromRole="CourseName" ToRole="Courses" />
+        </EntityType>
+        <EntityType Name="Cours">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCourseName" Type="Int32" Nullable="false" />
+          <Property Name="IDTeacher" Type="Int32" />
+          <Property Name="DateBegin" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CourseName" Relationship="Self.FK__Courses__IDCours__412EB0B6" FromRole="Courses" ToRole="CourseName" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Courses__IDTeach__4222D4EF" FromRole="Courses" ToRole="Users" />
+          <NavigationProperty Name="CourseStudents" Relationship="Self.FK__CourseStu__IDCou__45F365D3" FromRole="Courses" ToRole="CourseStudent" />
+          <NavigationProperty Name="Lessons" Relationship="Self.FK__Lessons__IDCours__534D60F1" FromRole="Courses" ToRole="Lessons" />
+        </EntityType>
+        <EntityType Name="CourseStudent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCourse" Type="Int32" Nullable="false" />
+          <Property Name="IDStudent" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AcademicPerfomances" Relationship="Self.FK__AcademicP__IDCou__5812160E" FromRole="CourseStudent" ToRole="AcademicPerfomances" />
+          <NavigationProperty Name="Cours" Relationship="Self.FK__CourseStu__IDCou__45F365D3" FromRole="CourseStudent" ToRole="Courses" />
+          <NavigationProperty Name="User" Relationship="Self.FK__CourseStu__IDStu__46E78A0C" FromRole="CourseStudent" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Lesson">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCourse" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AcademicPerfomances" Relationship="Self.FK__AcademicP__IDLes__571DF1D5" FromRole="Lessons" ToRole="AcademicPerfomances" />
+          <NavigationProperty Name="Cours" Relationship="Self.FK__Lessons__IDCours__534D60F1" FromRole="Lessons" ToRole="Courses" />
+        </EntityType>
+        <EntityType Name="ParentsChild">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDParent" Type="Int32" Nullable="false" />
+          <Property Name="IDChildren" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK__ParentsCh__IDChi__3C69FB99" FromRole="ParentsChild" ToRole="Users" />
+          <NavigationProperty Name="User1" Relationship="Self.FK__ParentsCh__IDPar__3B75D760" FromRole="ParentsChild" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Users__IDRoles__38996AB5" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDRoles" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IndentificstionDocument" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK__Courses__IDTeach__4222D4EF" FromRole="Users" ToRole="Courses" />
+          <NavigationProperty Name="CourseStudents" Relationship="Self.FK__CourseStu__IDStu__46E78A0C" FromRole="Users" ToRole="CourseStudent" />
+          <NavigationProperty Name="ParentsChilds" Relationship="Self.FK__ParentsCh__IDChi__3C69FB99" FromRole="Users" ToRole="ParentsChild" />
+          <NavigationProperty Name="ParentsChilds1" Relationship="Self.FK__ParentsCh__IDPar__3B75D760" FromRole="Users" ToRole="ParentsChild" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__Users__IDRoles__38996AB5" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK__AcademicP__IDCou__5812160E">
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AcademicPerfomances" Type="Self.AcademicPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseStudent">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AcademicPerfomances">
+              <PropertyRef Name="IDCousrseStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AcademicP__IDLes__571DF1D5">
+          <End Role="Lessons" Type="Self.Lesson" Multiplicity="1" />
+          <End Role="AcademicPerfomances" Type="Self.AcademicPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lessons">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AcademicPerfomances">
+              <PropertyRef Name="IDLessons" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Courses__IDCours__412EB0B6">
+          <End Role="CourseName" Type="Self.CourseName" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseName">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="IDCourseName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Courses__IDTeach__4222D4EF">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="IDTeacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CourseStu__IDCou__45F365D3">
+          <End Role="Courses" Type="Self.Cours" Multiplicity="1" />
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CourseStudent">
+              <PropertyRef Name="IDCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Lessons__IDCours__534D60F1">
+          <End Role="Courses" Type="Self.Cours" Multiplicity="1" />
+          <End Role="Lessons" Type="Self.Lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Lessons">
+              <PropertyRef Name="IDCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CourseStu__IDStu__46E78A0C">
+          <End Role="Users" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CourseStudent">
+              <PropertyRef Name="IDStudent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ParentsCh__IDChi__3C69FB99">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="ParentsChild" Type="Self.ParentsChild" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ParentsChild">
+              <PropertyRef Name="IDChildren" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ParentsCh__IDPar__3B75D760">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="ParentsChild" Type="Self.ParentsChild" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ParentsChild">
+              <PropertyRef Name="IDParent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__IDRoles__38996AB5">
+          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="IDRoles" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="sqlUspevatoriyaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AcademicPerfomances" EntityType="Self.AcademicPerfomance" />
+          <EntitySet Name="CourseNames" EntityType="Self.CourseName" />
+          <EntitySet Name="Courses" EntityType="Self.Cours" />
+          <EntitySet Name="CourseStudents" EntityType="Self.CourseStudent" />
+          <EntitySet Name="Lessons" EntityType="Self.Lesson" />
+          <EntitySet Name="ParentsChilds" EntityType="Self.ParentsChild" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK__AcademicP__IDCou__5812160E" Association="Self.FK__AcademicP__IDCou__5812160E">
+            <End Role="CourseStudent" EntitySet="CourseStudents" />
+            <End Role="AcademicPerfomances" EntitySet="AcademicPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AcademicP__IDLes__571DF1D5" Association="Self.FK__AcademicP__IDLes__571DF1D5">
+            <End Role="Lessons" EntitySet="Lessons" />
+            <End Role="AcademicPerfomances" EntitySet="AcademicPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Courses__IDCours__412EB0B6" Association="Self.FK__Courses__IDCours__412EB0B6">
+            <End Role="CourseName" EntitySet="CourseNames" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Courses__IDTeach__4222D4EF" Association="Self.FK__Courses__IDTeach__4222D4EF">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CourseStu__IDCou__45F365D3" Association="Self.FK__CourseStu__IDCou__45F365D3">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CourseStudent" EntitySet="CourseStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Lessons__IDCours__534D60F1" Association="Self.FK__Lessons__IDCours__534D60F1">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Lessons" EntitySet="Lessons" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CourseStu__IDStu__46E78A0C" Association="Self.FK__CourseStu__IDStu__46E78A0C">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CourseStudent" EntitySet="CourseStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ParentsCh__IDChi__3C69FB99" Association="Self.FK__ParentsCh__IDChi__3C69FB99">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ParentsChild" EntitySet="ParentsChilds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ParentsCh__IDPar__3B75D760" Association="Self.FK__ParentsCh__IDPar__3B75D760">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ParentsChild" EntitySet="ParentsChilds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__IDRoles__38996AB5" Association="Self.FK__Users__IDRoles__38996AB5">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище sqlUspevatoriyaModelContainer" CdmEntityContainer="sqlUspevatoriyaEntities">
+          <EntitySetMapping Name="AcademicPerfomances">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.AcademicPerfomance">
+              <MappingFragment StoreEntitySet="AcademicPerfomances">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDLessons" ColumnName="IDLessons" />
+                <ScalarProperty Name="IDCousrseStudent" ColumnName="IDCousrseStudent" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseNames">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.CourseName">
+              <MappingFragment StoreEntitySet="CourseName">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.Cours">
+              <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDCourseName" ColumnName="IDCourseName" />
+                <ScalarProperty Name="IDTeacher" ColumnName="IDTeacher" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseStudents">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.CourseStudent">
+              <MappingFragment StoreEntitySet="CourseStudent">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDCourse" ColumnName="IDCourse" />
+                <ScalarProperty Name="IDStudent" ColumnName="IDStudent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lessons">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.Lesson">
+              <MappingFragment StoreEntitySet="Lessons">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDCourse" ColumnName="IDCourse" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParentsChilds">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.ParentsChild">
+              <MappingFragment StoreEntitySet="ParentsChild">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDParent" ColumnName="IDParent" />
+                <ScalarProperty Name="IDChildren" ColumnName="IDChildren" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="sqlUspevatoriyaModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDRoles" ColumnName="IDRoles" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IndentificstionDocument" ColumnName="IndentificstionDocument" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,152 @@
+﻿<local:BasePage x:TypeArguments="local:GroupEditPageViewModel"  x:Class="Успеватория.GroupEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:local="clr-namespace:Успеватория" 
+      d:DataContext="{d:DesignInstance Type=local:GroupEditPageViewModel}"
+      mc:Ignorable="d" 
+      x:Name="Page"
+      d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--Заголовок-->
+            <RowDefinition Height="auto"/>
+            <!--Основной контент-->
+            <RowDefinition Height="*"/>
+            <!--Панель Добавления ученика-->
+            <RowDefinition Height="auto"/>
+            <!--Панель добавления урока-->
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <!--Наложение всплывающего окна-->
+        <Border Background="Transparent"
+        Grid.RowSpan="2"
+        Panel.ZIndex="1"
+        Visibility="{Binding AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=true}">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}"/>
+            </Border.InputBindings>
+        </Border>
+
+
+        <!--Заголовок-->
+        <Grid Height="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Текст заголовка-->
+            <TextBlock Text="{Binding DisplayTitle}"
+                       Grid.ColumnSpan="2"
+                       Foreground="{StaticResource ForegroundLightBrush}"
+                       FontSize="{StaticResource FontSizeXLarge}"
+                       FontFamily="{StaticResource LatoRegular}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       />
+
+            <!--Главные кнопки-->
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+
+                <!-- Доп меню для отчётов -->
+                <Button Style="{StaticResource IconGrowButton}"
+                        
+                    Command="{Binding AttachmentButtonCommand}"
+                        Content="{StaticResource FontAwesomeEllipsisVerticalIcon}" />
+
+
+            </StackPanel>
+        </Grid>
+
+        <local:GroupEditDataGrid x:Name="dgEditGroup"
+                           Grid.Row="1" 
+                           DataContext="{Binding}"/>
+
+        <!-- Всплывающее меню -->
+        <Border Grid.Row="1"
+                Panel.ZIndex="2"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                local:AnimateSlideInFromBottomProperty.Value="{Binding AttachmentMenuVisible}">
+
+            <local:BubbleContent DataContext="{Binding AttachmentMenu}" />
+
+        </Border>
+        <!--Кнопка сохранить-->
+        <Grid Grid.Row="2" 
+              MinHeight="50"
+              MaxHeight="114"
+              Background="{StaticResource WordTransparentOrangeBrush}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Дополнительные кнопки -->
+            <StackPanel  Grid.Row="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Top"
+                        Margin="0 0 8 0"
+                        >
+                <StackPanel Orientation="Vertical">
+                    <Label Margin="0 0 0 -10 " Content="Выберите студента " FontSize="{StaticResource FontSizeLarge}"/>
+                    <Label Content="для добавления в группу" FontSize="{StaticResource FontSizeLarge}"/>
+                </StackPanel>
+                <ComboBox  StaysOpenOnEdit="True"
+                           IsEditable="True"
+                           Text="{Binding textCB, Mode=TwoWay}"
+                           SelectedItem="{Binding selectStudent}"
+                           ItemsSource="{Binding users}"
+                           FontFamily="{StaticResource LatoBold}"
+                           FontSize="{StaticResource FontSizeXLarge}" 
+                           Width="200" VerticalAlignment="Center">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Surname}"/>
+                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Patronymic}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Кннопка сохранить -->
+                <Button Content="Добавить студента"
+                        Padding="8" Margin="20 0 0 0"
+                        Background="{StaticResource WordGreenBrush}"
+                        FontSize="{StaticResource FontSizeRegular}"
+                        Command="{Binding SaveButtonClick}" Height="30"
+                        />
+            </StackPanel>
+
+        </Grid>
+        <!-- Дополнительные кнопки -->
+        <StackPanel Grid.Row="3"
+            Grid.ColumnSpan="3"
+            Orientation="Horizontal"
+            VerticalAlignment="Top"
+            Margin="0 0 8 0"
+            >
+            <Label Content="Выберите дату для нового урока" FontSize="{StaticResource FontSizeLarge}"/>
+            <DatePicker DisplayDateStart="01/02/2020" FontFamily="{StaticResource LatoBold}" FontSize="{StaticResource FontSizeXLarge}" Width="200" VerticalAlignment="Center" SelectedDate="{Binding selectDate}"/>
+
+            <!-- Кнопка сохранить -->
+            <Button Content="Добавить урок"
+            Padding="8"
+            Background="{StaticResource WordGreenBrush}"
+            FontSize="{StaticResource FontSizeRegular}"
+            Command="{Binding AddButtonClick}"
+            />
+
+        </StackPanel>
+    </Grid>
+</local:BasePage>

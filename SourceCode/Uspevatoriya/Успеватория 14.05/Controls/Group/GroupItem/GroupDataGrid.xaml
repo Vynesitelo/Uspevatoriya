@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="Успеватория.GroupDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Успеватория"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+    
+    <Border BorderThickness="1" BorderBrush="{StaticResource WordOrangeBrush}" d:DataContext="{x:Static local:GroupTableItemDesignModel.Instance}">
+        <Grid>
+            
+            <DataGrid ToolTip='Внимание!!! Допустимы значений от 2 до 5 и "Н"' ItemsSource="{Binding Items}" x:Name="dg" MinColumnWidth="50" Panel.ZIndex="1" FrozenColumnCount="1">
+                <DataGrid.Columns >
+                    <DataGridTextColumn Visibility="Hidden" Header="id" Binding="{Binding id, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn 
+                                        HeaderStyle="{StaticResource dgColumnHeaderStudent}"
+                                        Binding="{Binding dgInitials, UpdateSourceTrigger=PropertyChanged}"
+                                        CellStyle="{StaticResource NotBorderDGC}"
+                                        Header="ФИО" IsReadOnly="True"/>
+                    <DataGridTextColumn
+                                        Binding="{Binding dgGrade, UpdateSourceTrigger=PropertyChanged}" 
+                                        HeaderStyle="{StaticResource dgColumnHeaderStudent}"
+                                        Header="Оценка" IsReadOnly="False"/>
+                    <DataGridTextColumn 
+                                        Binding="{Binding dgDateTime, UpdateSourceTrigger=PropertyChanged}"
+                                        HeaderStyle="{StaticResource dgColumnHeaderStudent}"
+                                        CellStyle="{StaticResource NotBorderDGC}"
+                                        Header="Дата урока" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Border>
+    
+</UserControl>
